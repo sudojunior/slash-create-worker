@@ -33,8 +33,8 @@ export class FetchRequestHandler extends RequestHandler {
       if (Array.isArray(file) || file.file) {
         data = new MultipartData();
         headers['Content-Type'] = 'multipart/form-data; boundary=' + data.boundary;
-        if (Array.isArray(file)) for (const f of file) await (data as MultipartData).attach(f.name, f.file, f.name);
-        else await (data as MultipartData).attach(file.name, file.file, file.name);
+        if (Array.isArray(file)) for (const i in file) await (data as MultipartData).attach(`files[${i}]`, file[i].file, file[i].name);
+        else await (data as MultipartData).attach('files[0]', file.file, file.name);
         if (body) await (data as MultipartData).attach('payload_json', JSON.stringify(body));
         data = data.finish();
       } else throw new Error('Invalid file object');
